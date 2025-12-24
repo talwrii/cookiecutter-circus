@@ -9,4 +9,15 @@ find . -maxdepth 1 -mindepth 1 -not -name "." -exec mv {} .. \;
 cd ..
 rmdir "{{ cookiecutter.service_name }}"
 
+
+# 3. Make scripts executable
+chmod +x setup
+chmod +x {{ cookiecutter.service_name }}-circus
+chmod +x {{ cookiecutter.service_name }}-run
+chmod +x circuscontrol
+chmod +x logger
+
+echo "Deployment complete. Files have been moved to the current directory."
+
+
 echo "Deployment complete. Files have been moved to the current directory."
