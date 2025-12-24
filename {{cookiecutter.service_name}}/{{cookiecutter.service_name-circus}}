@@ -1,0 +1,4 @@
+#!/bin/bash
+# Get the directory and run circusd via the runas shim
+DIR=$(dirname "${BASH_SOURCE[0]}")
+"$DIR/{{ cookiecutter.service_name }}-run" "$DIR/env/bin/circusd" "$DIR/circus.ini"

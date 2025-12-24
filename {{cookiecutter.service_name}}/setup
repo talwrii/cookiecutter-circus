@@ -1,0 +1,69 @@
+#!/bin/bash
+# {{ cookiecutter.service_name }}-setup.sh
+# Initialize the {{ cookiecutter.service_name }} service environment
+
+set -e
+
+echo "Setting up {{ cookiecutter.service_name }} service environment..."
+
+# Create virtual environment
+if [ ! -d "env" ]; then
+    echo "Creating virtual environment..."
+    python3 -m venv env
+fi
+
+# Activate virtual environment and install requirements
+echo "Installing Python dependencies..."
+source env/bin/activate
+pip install -r requirements.txt
+
+# Create log directory if needed
+mkdir -p logs
+
+# Set up file permissions
+chmod +x {{ cookiecutter.service_name }}-circus
+chmod +x {{ cookiecutter.service_name }}-run
+chmod +x circuscontrol
+chmod +x logger
+
+# Check for required system dependencies
+echo "Checking system dependencies..."
+
+if ! command -v rsyslogd &> /dev/null; then
+    echo "Warning: rsyslogd not found. Install rsyslog package."
+fi
+
+if ! command -v redir &> /dev/null; then
+    echo "Warning: redir not found. Install redir package."
+fi
+
+{% if cookiecutter.setup_mdns == 'y' %}
+if ! command -v avahi-publish &> /dev/null; then
+    echo "Warning: avahi-publish not found. Install avahi-utils package."
+fi
+{% endif %}
+
+if ! [ -f /opt/killable-sudo/killable-sudo ]; then
+    echo "Warning: killable-sudo not found at /opt/killable-sudo/killable-sudo"
+    echo "You may need to install or configure killable-sudo."
+fi
+
+# Verify user exists
+if ! id "{{ cookiecutter.target_user }}" &>/dev/null; then
+    echo "Error: User {{ cookiecutter.target_user }} does not exist."
+    echo "Create the user first: sudo useradd -m {{ cookiecutter.target_user }}"
+    exit 1
+fi
+
+echo "Setup complete!"
+echo ""
+echo "To start the service:"
+echo "  ./{{ cookiecutter.service_name }}-circus"
+echo ""
+echo "To control the service:"
+echo "  ./circuscontrol status"
+echo "  ./circuscontrol stop"
+echo "  ./circuscontrol restart"
+echo ""
+echo "To view logs:"
+echo "  tail -f circus.log"

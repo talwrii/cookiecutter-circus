@@ -1,0 +1,3 @@
+#!/bin/bash
+# Manage the {{cookiecutter.service_name}} Amal (Work)
+env/bin/circusctl --endpoint 'ipc://{{cookiecutter.service_name}}-endpoint' "$@"

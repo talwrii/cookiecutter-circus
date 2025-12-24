@@ -1,0 +1,8 @@
+{
+    "service_name": "myservice",
+    "target_user": "{{ cookiecutter.service_name }}",
+    "exposed_host": "{{ cookiecutter.service_name }}.local", 
+    "internal_port": "1024",
+    "external_port": "80",
+    "install_dir": "/home/{{ cookiecutter.target_user }}"
+}

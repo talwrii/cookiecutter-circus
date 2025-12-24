@@ -1,0 +1,8 @@
+#!/bin/bash
+TARGET_USER={{cookiecutter.target_user}}
+VENV_PATH="$(dirname "$0")/env/bin/activate"
+
+USER_UID=$(id -u "$TARGET_USER")
+export XDG_RUNTIME_DIR="/run/user/$USER_UID"
+
+exec sudo -u "$TARGET_USER" XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" bash -c "source '$VENV_PATH' 2>/dev/null || true; exec \"\$@\"" _ "$@"

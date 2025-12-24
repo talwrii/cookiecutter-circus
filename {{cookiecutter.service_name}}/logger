@@ -1,0 +1,10 @@
+#!/bin/bash
+app=$1
+shift
+here="$(dirname ${BASH_SOURCE[0]})"
+# Route logs to the templated syslog listener
+exec $here/env/bin/robust-syslog-wrap \
+    --app "$app" \
+    --host {{cookiecutter.exposed_host}} \
+    --port {{cookiecutter.internal_port}} \
+    "$@"
