@@ -37,11 +37,9 @@ if ! command -v redir &> /dev/null; then
     echo "Warning: redir not found. Install redir package."
 fi
 
-{% if cookiecutter.setup_mdns == 'y' %}
 if ! command -v avahi-publish &> /dev/null; then
     echo "Warning: avahi-publish not found. Install avahi-utils package."
 fi
-{% endif %}
 
 if ! [ -f /opt/killable-sudo/killable-sudo ]; then
     echo "Warning: killable-sudo not found at /opt/killable-sudo/killable-sudo"
