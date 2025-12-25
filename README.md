@@ -3,7 +3,7 @@ I like using circusd as a process manager rather than systemd because it keeps e
 
 This is a cookiecutter script to set up a basic circus script.
 
-I tend to have a distinct user for each servier and place this in the home directory (under version control)
+I tend to have a distinct user for each servier and place this in the home directory (under version control). I also like to run services on distinct IP addresses connected to the same host but store these IPs in the hosts file.
 
 ## Usage
 Create the user
@@ -12,5 +12,8 @@ Create the user
 `sudo chmod g+sw -R  /home/service`
 `cd /home/service`
 
-Run `cookiecutter https://github.com/talwrii/circus-cookiecutter`
+Run the following to set up the scripts
 
+`cookiecutter https://github.com/talwrii/cookiecutter-circus --no-input service_name=$(basename "$PWD"))
+
+You can then add entries for your services to circus.ini and run `$USER-circus` to bring up the script.
