@@ -8,7 +8,8 @@ I tend to have a distinct user for each servier and place this in the home direc
 ## Usage
 Create the user
 
-`adduser --disabled-password circus-cookiecutter service`
+`sudo adduser --disabled-password circus-cookiecutter service`
+`sudo adduser $USER service`
 `sudo chmod g+sw -R  /home/service`
 `cd /home/service`
 
