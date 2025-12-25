@@ -1,0 +1,41 @@
+#!/bin/bash
+# Load Cloudflare API token and zone ID
+source ./cloudflare.env
+
+# Check for correct number of arguments
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <cloudflare_record_name> <local_host_to_resolve>"
+    exit 1
+fi
+
+RECORD_NAME="$1"
+LOCAL_HOST="$2"
+
+# Get current IP of the specified local host
+IP=$(getent hosts "$LOCAL_HOST" | awk '{print $1}')
+
+# Fail early if getent didn't return an IP
+if [ -z "$IP" ]; then
+    echo "Error: could not resolve $LOCAL_HOST"
+    exit 1
+fi
+
+# Get existing record ID (if it exists)
+RECORD_ID=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records?name=$RECORD_NAME" \
+  -H "Authorization: Bearer $CF_API_TOKEN" \
+  -H "Content-Type: application/json" | jq -r '.result[0].id')
+
+# Update if exists, else create
+if [ "$RECORD_ID" != "null" ]; then
+  curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records/$RECORD_ID" \
+    -H "Authorization: Bearer $CF_API_TOKEN" \
+    -H "Content-Type: application/json" \
+    --data "{\"type\":\"A\",\"name\":\"$RECORD_NAME\",\"content\":\"$IP\",\"ttl\":120,\"proxied\":false}"
+else
+  curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records" \
+    -H "Authorization: Bearer $CF_API_TOKEN" \
+    -H "Content-Type: application/json" \
+    --data "{\"type\":\"A\",\"name\":\"$RECORD_NAME\",\"content\":\"$IP\",\"ttl\":120,\"proxied\":false}"
+fi
+
+echo "$RECORD_NAME is now pointing to $IP"
