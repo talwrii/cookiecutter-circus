@@ -6,6 +6,9 @@ This is a cookiecutter script to set up a basic circus script.
 I tend to have a distinct user for each servier and place this in the home directory (under version control). I also like to run services on distinct IP addresses connected to the same host but store these IPs in the hosts file.
 
 
+## Features
+Uses unix domain sockets to communicate with circus to you can have group based access
+
 ## Alternatives
 You could use systemd user scripts.
 You could log to separate files rather than using a syslog. 
