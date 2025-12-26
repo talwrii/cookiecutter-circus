@@ -3,11 +3,15 @@ I like using circusd as a process manager rather than systemd because it keeps e
 
 This is a cookiecutter script to set up a basic circus script.
 
-I tend to have a distinct user for each servier and place this in the home directory (under version control). I also like to run services on distinct IP addresses connected to the same host but store these IPs in the hosts file.
+I tend to have a distinct user for each servier and place this in the home directory (under version control). This makes it easy to filter processes and permissions by user.
+
+I also like to run services on distinct IP addresses connected to the same host but store these IPs in the hosts file.
 
 
 ## Features
-Uses unix domain sockets to communicate with circus to you can have group based access
+* Uses unix domain sockets to communicate with circus to you can have group based access to circus (rather than giving eveyone on the machine access)
+* Uses a rsyslogd for logging so you have as single combined logs
+* Uses sudo a redir to give access to lower ports
 
 ## Alternatives
 You could use systemd user scripts.
